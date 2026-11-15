@@ -1,0 +1,25 @@
+[package]
+name = "geozip-gui"
+description = "GeoZip desktop application"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "geozip-gui"
+path = "src/main.rs"
+
+[dependencies]
+eframe = { version = "0.37", default-features = false, features = ["default_fonts", "wgpu", "wayland", "x11"] }
+egui_extras = "0.37"
+flate2 = "1.1.11"
+geozip-core = { path = "../geozip-core" }
+rfd = "0.17"
+serde_json = "1.0.154"
+time = { version = "0.3", features = ["local-offset"] }
+ureq = "3.5.2"
+walkers = { version = "0.65", features = ["mvt", "pmtiles"] }
+
+[target.'cfg(windows)'.build-dependencies]
+winresource = "0.1"

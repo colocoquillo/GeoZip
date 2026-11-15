@@ -1,0 +1,14 @@
+[package]
+name = "geozip-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+geozip-core = { version = "0.1.0", path = "../geozip-core" }
+
+[[bin]]
+name = "geozip"
+path = "src/main.rs"

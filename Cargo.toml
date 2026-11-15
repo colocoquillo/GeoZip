@@ -1,0 +1,17 @@
+[workspace]
+resolver = "2"
+members = ["crates/geozip-core", "crates/geozip-cli", "crates/geozip-gui"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/colocoquillo/GeoZip"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+strip = true
+
+[profile.dev.package."*"]
+opt-level = 2
