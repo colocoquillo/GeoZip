@@ -167,8 +167,9 @@ and shifts feed the canonical string.
 
 ### Visible names (`names=visible`)
 
-Each file is an entry encrypted with AE-2. Directories are unencrypted entries
-with no data. Names, sizes and dates are visible.
+Each file is an entry encrypted with AE-2. Empty files are stored rather than
+deflated, because some older ZIP tools fail on an encrypted empty deflate
+stream. Directories are unencrypted entries with no data. Names, sizes and dates are visible.
 
 When opening, a reader **rejects the archive** if it finds an entry that is
 neither a directory nor encrypted. ZIP does not authenticate the archive as a

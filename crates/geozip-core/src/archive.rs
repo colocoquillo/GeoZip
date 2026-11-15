@@ -214,6 +214,11 @@ impl<'a, W: Write + Seek> Sink<'a, W> {
         reader: &mut dyn Read,
     ) -> Result<()> {
         (self.progress)(Event::Entry(name));
+        let compression = if size == 0 {
+            Compression::Store
+        } else {
+            compression
+        };
         let mut o = Self::base_options(meta, compression)?.large_file(size >= ZIP64_THRESHOLD);
         if let Some((password, header_text)) = self.crypt {
             o.add_extra_field(EXTRA_FIELD_ID, header_text.as_bytes(), false)?;

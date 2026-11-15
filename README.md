@@ -4,7 +4,7 @@ GeoZip makes ordinary AES-256 ZIP archives whose key is not a password. The
 key is five places on a map, in order, that only you know. At the highest
 level the program also gives you one random word per place.
 
-![The place picker: five rows of coordinates and words next to a map](docs/places.png)
+![Protecting a folder with five places, then opening it again](docs/demo.gif)
 
 > **Experimental.** GeoZip has not been audited by anyone outside the project,
 > the file format is still a draft, and the word list may change before 1.0.
@@ -47,6 +47,8 @@ open the archive, including the author of this program.
 3. The places, the words and a random salt stored in the file go through
    Argon2id, which is slow on purpose, and the result is the AES-256 key of a
    standard ZIP archive.
+
+![The place picker: five rows of coordinates and words next to a map](docs/places.png)
 
 | Level | What you remember |
 |---|---|

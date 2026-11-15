@@ -477,14 +477,23 @@ fn have(tool: &str) -> bool {
     Command::new(tool).arg("--help").output().is_ok()
 }
 
+fn ascii_tree(base: &Path) -> PathBuf {
+    let root = base.join("plain");
+    fs::create_dir_all(root.join("nested")).unwrap();
+    fs::write(root.join("hello.txt"), "hello\n").unwrap();
+    fs::write(root.join("empty.bin"), b"").unwrap();
+    fs::write(root.join("nested/data.bin"), vec![7u8; 70_000]).unwrap();
+    root
+}
+
 #[test]
 fn seven_zip_opens_it_with_the_derived_password() {
     if !have("7z") {
-        eprintln!("7z no está instalado; se omite la prueba de interoperabilidad");
+        eprintln!("7z is not installed; skipping the interoperability test");
         return;
     }
     let tmp = TempDir::new().unwrap();
-    let root = sample_tree(tmp.path());
+    let root = ascii_tree(tmp.path());
     let zip_path = tmp.path().join("a.zip");
     let created = archive::create(
         &zip_path,
@@ -507,11 +516,16 @@ fn seven_zip_opens_it_with_the_derived_password() {
             .output()
             .unwrap()
     };
-    assert!(!run("contraseña-equivocada").status.success());
+    assert!(!run("wrong-password").status.success());
     let _ = fs::remove_dir_all(&out);
     let ok = run(&password);
-    assert!(ok.status.success(), "{}", String::from_utf8_lossy(&ok.stdout));
-    assert_eq!(files_under(&out.join("docs")), files_under(&root));
+    assert!(
+        ok.status.success(),
+        "{}\n{}",
+        String::from_utf8_lossy(&ok.stdout),
+        String::from_utf8_lossy(&ok.stderr)
+    );
+    assert_eq!(files_under(&out.join("plain")), files_under(&root));
 }
 
 #[test]
